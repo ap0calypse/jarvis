@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Proc::ProcessTable;
+use lib "./agents/";
+use JarvisFunctions;
+
+
+# what module is this?
+my $agent_name = "MaxProcessCheck";
+
+# every agent gets an id and the name from jarvis when started
+my ($id, $name) = @ARGV;
+
+# params just for this agent, not directly given from jarvis. we will
+# get them from the config later.
+
+my ($interval, $maxprocs);
+
+# because every agent is different, we need to get the data from the config
+my $config = "/home/ap0calypse/projects/jarvis/example-config";
+
+open my $CONFFD, "< $config" or die "$0: $!";
+while (<$CONFFD>) {
+    # got the config entry
+    if (m/.*agent=\[$agent_name,"$name", *(\d+) *, *(\d+) *\]/) {
+        ($interval, $maxprocs) = ($1, $2);
+    }
+    else {
+        next;
+    }
+}
+close $CONFFD;
+
+while(1) {
+    my $num = 0;
+    my $t = Proc::ProcessTable->new();
+    for my $p (@{$t->table()}) {
+        $num++;
+    }
+    if ($num > $maxprocs) {
+        tell_jarvis($id, $name, $agent_name, 0, $num);
+    }
+    else {
+        tell_jarvis($id, $name, $agent_name, 1, $num);
+    }
+    sleep($interval);
+}
+

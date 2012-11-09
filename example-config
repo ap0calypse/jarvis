@@ -21,6 +21,9 @@ agent=[FileExistsCheck,"fs_agent_1",60,'/tmp/logfile']
 # agent that checks if a given process (here chromium) is running. 
 agent=[ProcessCheck,"proc_agent_1",60,'chromium']
 
+# agent that checks the amount of processes for a limit every 60 seconds 
+agent=[MaxProcessCheck,"numproc_agent_1",60,200]
+
 # escalation triggers
 # explanation of fields:
 # first param (must be in '')   name of the trigger
