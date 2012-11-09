@@ -1,9 +1,9 @@
 # example agent definitions
-# tcp agent that monitors post 22 on localhost every 10 seconds
+# tcp agent that monitors port 22 on localhost every 10 seconds
 agent=[TCPConnect,"tcp_agent_1",10,localhost,22]
 
 
-# udp agent that monitors post 20 on localhost every 10 seconds
+# udp agent that monitors port 20 on localhost every 10 seconds
 agent=[UDPConnect,"udp_agent_1",10,localhost,20]
 
 # log agent that searches in /tmp/logfile for the specified regex
