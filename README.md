@@ -15,3 +15,8 @@ just one central configuration file. Here is a short list of the features jarvis
 
 Agents, as in the list above, can be written and included very easily. Each agent is an own process,
 jarvis just forks and execs.
+
+*IMPORTANT*
+===========
+
+This is an alpha release. It is NOT finished and ready for productive use yet. Please use with caution.
