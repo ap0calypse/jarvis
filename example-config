@@ -15,6 +15,9 @@ agent=[DiskUsageCheck,"du_agent_1",60,/tmp,90]
 # agent that checks /tmp/logfile every 60 seconds if it is bigger than 500.000 bytes
 agent=[FileSizeCheck,"fs_agent_1",60,'/tmp/logfile',500000]
 
+# agent that checks if a given process (here chromium) is running. 
+agent=[ProcessCheck,"proc_agent_1",60,'chromium']
+
 # escalation triggers
 # explanation of fields:
 # first param (must be in '')   name of the trigger

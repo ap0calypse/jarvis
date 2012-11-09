@@ -16,6 +16,12 @@ just one central configuration file. Here is a short list of the features jarvis
 Agents, as in the list above, can be written and included very easily. Each agent is an own process,
 jarvis just forks and execs.
 
+The following perl modules need to be installed:
+
+* perl-proc-processtable
+* perl-filesys-df
+* perl-file-tail
+
 *IMPORTANT*
 ===========
 
