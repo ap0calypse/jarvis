@@ -7,10 +7,10 @@ use JarvisFunctions;
 # what module is this?
 my $agent_name = "FileSizeCheck";
 
-# every agent gets an id and the name from osiris when started
+# every agent gets an id and the name from jarvis when started
 my ($id, $name) = @ARGV;
 
-# params just for this agent, not directly given from osiris. we will
+# params just for this agent, not directly given from jarvis. we will
 # get them from the config later.
 
 my ($path, $interval, $maxsize);
