@@ -1,0 +1,135 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Data::Dumper;
+use IO::Socket;
+use DBI;
+use Time::Piece;
+
+my $dbargs = {AutoCommit => 0, PrintError => 1};
+my $dbh = DBI->connect("dbi:SQLite:dbname=/home/ap0calypse/projects/jarvis/dbdata", "", "", $dbargs);
+
+# project:      jarvis - Just Another Really Versatile Information System
+# author:       see AUTHORS
+# license:      GPL
+# version:      0.1a
+
+# lets open a server and listen for connections. through this socket
+# jarvis communicates with its agents. the agents send a statusline and
+# jarvis parses it, then writes into a database.
+my $sock = new IO::Socket::INET (
+    LocalPort => '31337',
+    Proto => 'tcp',
+    Listen => 1,
+    Reuse => 1,
+);
+
+# for the ids we use random 16-chars
+my @chars = ("A" .. "Z", "a" .. "z");
+
+# to store the information about the agents defined in the config,
+# we use this hash.
+my %o;
+
+# first, we parse through the config file to find valid entries. then,
+# we feed these values to the hash structure.
+my $config = "./example-config";
+open my $CONFFD, "< $config" or die "$0: $!";
+while (<$CONFFD>) {
+    if (m/agent=\[ *(.+) *, *"(.+)" *,.+\]/) {
+        chomp($1, $2);
+        push @{$o{$1}}, {
+            'name' => $2, 
+            'id' => join ("", @chars[map {rand @chars} (1 .. 16)])
+        };
+
+    }
+    elsif (m/trigger=\[ *'(.+)' *, *"(.+)" *, *(\d+) *, *(\d+) *, *(.+) *\]/) {
+        chomp($1, $2, $3, $4, $5);
+        for my $agenttype (keys %o) {
+            for my $ref (@{$o{$agenttype}}) {
+                if ($ref->{'name'} eq $2) {
+                    $ref->{'trigger'} = $1;
+                    $ref->{'failmax'} = $3;
+                    $ref->{'timemax'} = $4;
+                    $ref->{'exec'} = $5;
+                }
+            }
+        }
+    }
+    else {
+        next;
+    }
+}
+close $CONFFD;
+
+# now we kick off all the agents .. go go go
+# to do this, we fork a process for every agent and then exec 
+# into it.
+for my $agenttype (keys %o) {
+    for my $ref (@{$o{$agenttype}}) {
+        if (fork() == 0) {
+            exec "./agents/$agenttype $ref->{'id'} $ref->{'name'}";
+        }
+    }
+}
+# function to insert the feedline to the database, nothing spectacular, move on.
+sub feed_db {
+    my @fd = split /:/, shift;
+    my $t = localtime;
+    my $time = $t->ymd() .  " " . $t->hms();
+    $dbh->do("INSERT INTO events (ev_id, id, name, typ, status, message, datum) " .
+             "VALUES (NULL,'$fd[0]', '$fd[1]', '$fd[2]', '$fd[3]', '$fd[4]', '$time');");
+    if ($dbh->err()) { die "$DBI::errstr\n"; }
+    $dbh->commit();
+}
+
+
+sub check_triggers {
+    for my $agenttype (keys %o) {
+        for my $ref (@{$o{$agenttype}}) {
+            if (defined $ref->{'trigger'}) {
+                my $sth = $dbh->prepare("SELECT COUNT(*) FROM events WHERE name = ? " .
+                                        "AND status = 0 AND datum > " .
+                                        "datetime('now','localtime','-" . 
+                                         $ref->{'timemax'} . " seconds');");
+                $sth->execute($ref->{'name'});
+                my $rows = $sth->fetchrow();
+                my $trig = $dbh->prepare("SELECT COUNT(*) FROM triggers WHERE tr_name = ? " .
+                                        "AND datum > " .
+                                        "datetime('now','localtime','-" . 
+                                         $ref->{'timemax'} . " seconds');");
+                $trig->execute($ref->{'trigger'});
+                my $trows = $trig->fetchrow();
+                my $t = localtime;
+                my $time = $t->ymd() .  " " . $t->hms();
+                if($rows > $ref->{'failmax'} && $trows == 0) {
+                    print "too many errors for $ref->{'name'}, executing: $ref->{'exec'}\n";
+                    system($ref->{'exec'});
+                    $dbh->do("INSERT INTO triggers (tr_id, tr_name, datum) values " .
+                             "(NULL, '" . $ref->{'trigger'} . "', '$time')");
+                    $dbh->commit();
+                }
+            }
+        }
+    }
+}
+
+
+# main accept loop. as soon as a agent connects to osiris, we fork
+# a child process so that the main accept loop keeps running. even if
+# multiple agents connect at the same time (which happens very often)
+# the agents don't have to wait. the parent then waits for the child
+# to finish.
+while(my $client = $sock->accept()) {
+    if (fork() == 0) {
+        chomp(my $line = <$client>);
+        feed_db($line);
+        check_triggers();
+        close($client);
+        exit;
+    }
+    else {
+        wait();
+    }
+}

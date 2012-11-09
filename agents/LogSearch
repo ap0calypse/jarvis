@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use File::Tail;
+use lib "./agents/";
+use JarvisFunctions;
+
+# what module is this?
+my $agent_name = "LogSearch";
+
+# every agent gets an id and the name from osiris when started
+my ($id, $name) = @ARGV;
+
+# params just for this agent, not directly given from osiris. we will
+# get them from the config later.
+
+my ($logfile, $regex);
+
+# because every agent is different, we need to get the data from the config
+my $config = "/home/ap0calypse/projects/jarvis/example-config";
+
+open my $CONFFD, "< $config" or die "$0: $!";
+while (<$CONFFD>) {
+    # got the config entry
+    if (m/\[$agent_name,"$name",(.+),'(.+)'\]/) {
+        ($logfile, $regex) = ($1, qr($2));
+    }
+    else {
+        next;
+    }
+}
+close $CONFFD;
+
+sub process_line {
+    my $line = shift;
+    if ($line =~ m/$regex/) {
+        tell_jarvis($id, $name, $agent_name, 0, "$line");
+    }
+}          
+
+# now we really start
+my $tail = File::Tail->new( name =>  $logfile,
+        tail => 0, 
+        maxinterval => 1,
+        ) or die $!;
+
+my $line;
+while ( defined( $line = $tail->read) ) {
+    process_line( $line );
+}
