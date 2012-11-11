@@ -5,6 +5,8 @@ use Data::Dumper;
 use IO::Socket;
 use DBI;
 use Time::Piece;
+use lib './agents/';
+use JarvisFunctions;
 
 my $dbargs = {AutoCommit => 0, PrintError => 1};
 my $dbh = DBI->connect("dbi:SQLite:dbname=/home/ap0calypse/projects/jarvis/dbdata", "", "", $dbargs);
@@ -33,7 +35,7 @@ my %o;
 
 # first, we parse through the config file to find valid entries. then,
 # we feed these values to the hash structure.
-my $config = "./example-config";
+my $config = get_config();
 open my $CONFFD, "< $config" or die "$0: $!";
 while (<$CONFFD>) {
     next if m/^\s*#.*/;

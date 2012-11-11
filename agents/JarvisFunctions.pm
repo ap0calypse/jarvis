@@ -7,7 +7,7 @@ package JarvisFunctions;
 require Exporter;
 our @ISA = qw(Exporter);
 
-our @EXPORT = qw(tell_jarvis);
+our @EXPORT = qw(tell_jarvis get_config);
 
 sub tell_jarvis {
     my $serv = IO::Socket::INET->new(
@@ -17,6 +17,10 @@ sub tell_jarvis {
     );
     my ($id, $name, $type, $status, $message) = (shift, shift, shift, shift, shift);
     print $serv "$id:$name:$type:$status:$message\n";
+}
+
+sub get_config {
+    return "/etc/jarvis.conf";
 }
 
 

@@ -16,7 +16,7 @@ my ($id, $name) = @ARGV;
 my ($path, $interval);
 
 # because every agent is different, we need to get the data from the config
-my $config = "/home/ap0calypse/projects/jarvis/example-config";
+my $config = get_config();
 
 open my $CONFFD, "< $config" or die "$0: $!";
 while (<$CONFFD>) {
