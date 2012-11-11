@@ -36,6 +36,7 @@ my %o;
 my $config = "./example-config";
 open my $CONFFD, "< $config" or die "$0: $!";
 while (<$CONFFD>) {
+    next if m/^\s*#.*/;
     if (m/agent=\[ *(.+) *, *"(.+)" *,.+\]/) {
         chomp($1, $2);
         push @{$o{$1}}, {

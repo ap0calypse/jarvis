@@ -22,6 +22,7 @@ my $config = "/home/ap0calypse/projects/jarvis/example-config";
 
 open my $CONFFD, "< $config" or die "$0: $!";
 while (<$CONFFD>) {
+    next if m/^\s*#.*/;
     # got the config entry
     if (m/.*agent=\[$agent_name,"$name", *(\d+) *, *(\d+) *\]/) {
         ($interval, $maxprocs) = ($1, $2);
