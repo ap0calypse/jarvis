@@ -59,6 +59,7 @@ example config to get a clue how to use them) you can launch different scripts a
 For example (taken from the example config):
 
 agent=[TCPConnect,"tcp\_agent\_1",10,localhost,22]
+
 trigger=['trigger\_2',"tcp\_agent\_1",5,60,/tmp/triggerscript]
 
 The above line is the agent that checks port 22 (ssh) on localhost.
