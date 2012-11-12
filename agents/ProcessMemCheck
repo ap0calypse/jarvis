@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Proc::ProcessTable;
+use lib "./agents/";
+use JarvisFunctions;
+
+
+# what module is this?
+my $agent_name = "ProcessMemCheck";
+
+# every agent gets an id and the name from jarvis when started
+my ($id, $name) = @ARGV;
+
+# params just for this agent, not directly given from jarvis. we will
+# get them from the config later.
+
+my ($procname, $interval, $maxsize);
+
+# because every agent is different, we need to get the data from the config
+my $config = get_config(); 
+
+open my $CONFFD, "< $config" or die "$0: $!";
+while (<$CONFFD>) {
+    next if m/^\s*#.*/;
+    # got the config entry
+    if (m/.*agent=\[$agent_name,"$name", *(\d+) *, *'(.+)' *, *(\d+) *\]/) {
+        ($interval, $procname, $maxsize) = ($1, $2, $3);
+    }
+    else {
+        next;
+    }
+}
+close $CONFFD;
+
+while(1) {
+    my $t = Proc::ProcessTable->new();
+    for my $p (@{$t->table()}) {
+        if ($p->cmndline() =~ m/$procname/) {
+            if (int($p->rss / 1024 / 1024) > $maxsize) {
+                tell_jarvis($id, $name, $agent_name, 0, int($p->rss / 1024 / 1024));
+            }
+            else {
+                tell_jarvis($id, $name, $agent_name, 1, int($p->rss / 1024 / 1024));
+            }
+
+        }
+    }
+    sleep($interval);
+}
+

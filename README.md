@@ -36,6 +36,7 @@ you consider writing an agent. Currently there are the following agents:
 * UDPConnect
 * LogSearch
 * ProcessCheck
+* ProcessMemCheck
 * MaxProcessCheck
 * FileSizeCheck
 * FileExistsCheck

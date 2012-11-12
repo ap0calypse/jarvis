@@ -24,6 +24,9 @@ agent=[ProcessCheck,"proc_agent_1",60,'chromium']
 # agent that checks the amount of processes for a limit every 60 seconds 
 agent=[MaxProcessCheck,"numproc_agent_1",60,200]
 
+# agent that checks the amount of memory used (in MB) by a process every 60 seconds
+agent=[ProcessMemCheck,"memproc_agent_1",60,'chromium',200]
+
 # escalation triggers
 # explanation of fields:
 # first param (must be in '')   name of the trigger
