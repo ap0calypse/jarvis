@@ -36,6 +36,8 @@ After this, you can start jarvis and watch as your sqlite database gets filled w
 
 If you want to get reports, I recommend to use the jarvis\_report tool, which comes with the bundle. 
 
+For further information on agents and configuration, consider the Wiki.
+
 *IMPORTANT*
 ===========
 
