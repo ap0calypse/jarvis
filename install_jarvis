@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# name:         jarvis_install
+# purpose:      dialog installation process for jarvis
+# author:       Manuel Fill (manuel.fill.42@gmail.com)
+
+# This part of jarvis is distributed under the same license
+# as jarvis itself.
+
+cat <<EOTEXT
+Welcome to the jarvis installation process.
+This script will install and initialize the database
+as well as the needed files.
+EOTEXT
+
+echo "Please enter the path where you want the database installed.";
+echo "Leave blank for default location (/opt/jarvis/jarvis.db)";
+read -p "Answer: " jarvispath;
+
+if [ "$jarvispath" == "" ]; then
+    jarvispath='/opt/jarvis/jarvis.db';
+fi
+
+echo "SQLite database will be stored in $jarvispath";
