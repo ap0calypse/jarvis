@@ -28,16 +28,23 @@ while [[ $yon != y && $yon != n ]] ; do
 done
 
 function start_install() {
+    # add jarvis user
     useradd -g users -d /opt/jarvis -s /bin/false -c JarvisUser jarvis 2> /dev/null;
+    # delete possible earlier installation
     rm -r /opt/jarvis;
     mkdir /opt/jarvis 2> /dev/null;
+    # copy everything
+    cp -r * /opt/jarvis/;
+    # initialize database
     SQLITE=$(which sqlite3);
     rm "/opt/jarvis/jarvis.db" 2> /dev/null;
     $SQLITE /opt/jarvis/jarvis.db \
 "CREATE TABLE events (ev_id integer primary key, id text, name text, typ text, status integer, message text, datum datetime);"
     $SQLITE /opt/jarvis/jarvis.db \
 "CREATE TABLE triggers (tr_id integer primary key, tr_name text, datum datetime);"
-    cp -r * /opt/jarvis/;
+    # copy example config to right location
+    cp /opt/jarvis/example-config /opt/jarvis/jarvis.conf
+    # set the right permissions for jarvis user
     chown -R jarvis:users /opt/jarvis;
 }
 
