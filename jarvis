@@ -13,7 +13,7 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=/opt/jarvis/jarvis.db", "", "", $dbarg
 
 # project:      jarvis - Just Another Really Versatile Information System
 # author:       see AUTHORS
-# license:      GPL
+# license:      BEER-WARE
 # version:      0.1a
 
 # lets open a server and listen for connections. through this socket
