@@ -7,18 +7,45 @@
 # This part of jarvis is distributed under the same license
 # as jarvis itself.
 
+if [ $UID -ne 0 ] ; then
+    echo "You need superuser privileges to run this installer!";
+    exit;
+fi
+
 cat <<EOTEXT
 Welcome to the jarvis installation process.
 This script will install and initialize the database
 as well as the needed files.
 EOTEXT
 
-echo "Please enter the path where you want the database installed.";
-echo "Leave blank for default location (/opt/jarvis/jarvis.db)";
-read -p "Answer: " jarvispath;
+echo "jarvis will be installed in /opt/jarvis";
 
-if [ "$jarvispath" == "" ]; then
-    jarvispath='/opt/jarvis/jarvis.db';
+read -p "Do you want the installer to automatically install everything ? [y/n]: " yon;
+
+while [[ $yon != y && $yon != n ]] ; do
+    echo "You entered an invalid answer."
+    read -p "Do you want the installer to automatically install everything ? [y/n]: " yon;
+done
+
+function start_install() {
+    useradd -g users -d /opt/jarvis -s /bin/false -c JarvisUser jarvis 2> /dev/null;
+    rm -r /opt/jarvis;
+    mkdir /opt/jarvis 2> /dev/null;
+    SQLITE=$(which sqlite3);
+    rm "/opt/jarvis/jarvis.db" 2> /dev/null;
+    $SQLITE /opt/jarvis/jarvis.db \
+"CREATE TABLE events (ev_id integer primary key, id text, name text, typ text, status integer, message text, datum datetime);"
+    $SQLITE /opt/jarvis/jarvis.db \
+"CREATE TABLE triggers (tr_id integer primary key, tr_name text, datum datetime);"
+    cp -r * /opt/jarvis/;
+    chown -R jarvis:users /opt/jarvis;
+}
+
+if [ "$yon" == "y" ] ; then
+    echo -n 'Starting installation ... ';
+    start_install;
+    echo 'DONE!';
+else
+    echo 'Aborting installation!';
 fi
 
-echo "SQLite database will be stored in $jarvispath";

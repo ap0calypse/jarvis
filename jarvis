@@ -9,7 +9,7 @@ use lib './agents/';
 use JarvisFunctions;
 
 my $dbargs = {AutoCommit => 0, PrintError => 1};
-my $dbh = DBI->connect("dbi:SQLite:dbname=/home/ap0calypse/projects/jarvis/dbdata", "", "", $dbargs);
+my $dbh = DBI->connect("dbi:SQLite:dbname=/opt/jarvis/jarvis.db", "", "", $dbargs);
 
 # project:      jarvis - Just Another Really Versatile Information System
 # author:       see AUTHORS

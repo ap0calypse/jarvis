@@ -20,7 +20,7 @@ sub tell_jarvis {
 }
 
 sub get_config {
-    return "/etc/jarvis.conf";
+    return "/opt/jarvis/jarvis.conf";
 }
 
 
