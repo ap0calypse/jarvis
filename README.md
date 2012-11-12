@@ -3,13 +3,13 @@ jarvis
 
 Just Another Really Versatile Information System
 
-1.      ABOUT
-1.1.    THE NAME
-2.      FEATURES
-2.1.    TRIGGERS
-3.      INSTALLATION
-4.      TODO
-5.      LICENSE
+1. ABOUT
+1.1. THE NAME
+2. FEATURES
+2.1. TRIGGERS
+3. INSTALLATION
+4. TODO
+5. LICENSE
 
 
 1. ABOUT
