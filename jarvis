@@ -119,7 +119,7 @@ sub check_triggers {
 }
 
 
-# main accept loop. as soon as a agent connects to osiris, we fork
+# main accept loop. as soon as an agent connects to jarvis, we fork
 # a child process so that the main accept loop keeps running. even if
 # multiple agents connect at the same time (which happens very often)
 # the agents don't have to wait. the parent then waits for the child
