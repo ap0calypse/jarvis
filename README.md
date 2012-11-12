@@ -26,7 +26,7 @@ to create a monitoring suite myself.
 
 You know Iron Man? His very spectacular computer system is called J.A.R.V.I.S. which is an abbreviation 
 for 'Just Another Very Intelligent System'. This version of jarvis, however, is not that smart and my
-interpretation is 'Jst Another Really Versatile Information System' which is equivalently vague.
+interpretation is 'Just Another Really Versatile Information System' which is equivalently vague.
 
 2. FEATURES
 ===========
