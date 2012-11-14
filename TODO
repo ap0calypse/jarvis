@@ -1,0 +1,6 @@
+ - sigint handler for jarvis [cleanup, ...]
+ - more agents
+ - jarvis_report tool [latex output, piecharts, ...]
+ - documentation on how jarvis works internally
+ - commenting stuff
+ - howto for writing own agents
