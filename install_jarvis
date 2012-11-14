@@ -29,7 +29,7 @@ done
 
 function start_install() {
     # add jarvis user
-    useradd -g users -d /opt/jarvis -s /bin/false -c JarvisUser jarvis 2> /dev/null;
+    useradd -g users -d /opt/jarvis -s /bin/bash -c JarvisUser jarvis 2> /dev/null;
     # delete possible earlier installation
     rm -r /opt/jarvis;
     mkdir /opt/jarvis 2> /dev/null;
