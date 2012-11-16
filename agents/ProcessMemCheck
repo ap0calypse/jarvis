@@ -45,6 +45,9 @@ while(1) {
             }
 
         }
+        else {
+            tell_jarvis($id, $name, $agent_name, 0, 0);
+        }
     }
     sleep($interval);
 }

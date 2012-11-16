@@ -55,4 +55,3 @@ if [ "$yon" == "y" ] ; then
 else
     echo 'Aborting installation!';
 fi
-

@@ -1,5 +1,36 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use DBI;
+
+# project:      jarvis - Just Another Really Versatile Information System
+# part:         jarvis_report - generate reports from jarvis data
+# author:       see AUTHORS
+# license:      BEER-WARE
+# version:      0.1a
+
+
+# first of all, parse the args
+
+if (scalar @ARGV < 2) {
+    die "You have to specify at least a start and an end date!\n";
+}
+
+
+my $dbargs = {AutoCommit => 0, PrintError => 1};
+my $dbh = DBI->connect("dbi:SQLite:dbname=/opt/jarvis/jarvis.db", "", "", $dbargs);
+
+my $latexheader = <<'EOHEAD';
+\documentclass[12pt]{scrartcl}
+\usepackage{graphicx}
+EOHEAD
+
+my $latexfooter = <<'EOFOOT';
+\end{document}
+EOFOOT
+
+
+
+
 
 
