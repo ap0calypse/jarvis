@@ -35,8 +35,10 @@ close $CONFFD;
 
 while(1) {
     my $t = Proc::ProcessTable->new();
+    my $found = 0;
     for my $p (@{$t->table()}) {
         if ($p->cmndline() =~ m/$procname/) {
+            $found = 1;
             if (int($p->rss / 1024 / 1024) > $maxsize) {
                 tell_jarvis($id, $name, $agent_name, 0, int($p->rss / 1024 / 1024));
             }
@@ -45,10 +47,11 @@ while(1) {
             }
 
         }
-        else {
-            tell_jarvis($id, $name, $agent_name, 0, 0);
-        }
     }
+    if ($found == 0) {
+        tell_jarvis($id, $name, $agent_name, 0, 0);
+    }
+
     sleep($interval);
 }
 
