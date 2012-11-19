@@ -4,3 +4,4 @@
  - documentation on how jarvis works internally
  - commenting stuff
  - howto for writing own agents
+ - fix agents (error handling, ...)

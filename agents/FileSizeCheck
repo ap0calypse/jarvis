@@ -32,12 +32,17 @@ while (<$CONFFD>) {
 close $CONFFD;
 
 while(1) {
-    my $size= (stat $path)[7];
-    if ($size > $maxsize) {
-        tell_jarvis($id, $name, $agent_name, 0, $size);
+    if (-e $path) {
+        my $size = (stat $path)[7];
+        if ($size > $maxsize) {
+            tell_jarvis($id, $name, $agent_name, 0, $size);
+        }
+        else {
+            tell_jarvis($id, $name, $agent_name, 1, $size);
+        }
     }
     else {
-        tell_jarvis($id, $name, $agent_name, 1, $size);
+        tell_jarvis($id, $name, $agent_name, 0, 0);
     }
     sleep($interval);
 }

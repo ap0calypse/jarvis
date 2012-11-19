@@ -38,12 +38,16 @@ sub process_line {
         tell_jarvis($id, $name, $agent_name, 0, "$line");
     }
 }          
+unless (-e $logfile) {
+    print "Logfile $logfile does not exist, $agent_name will NOT start!\n";
+    exit();
+}
 
 # now we really start
 my $tail = File::Tail->new( name =>  $logfile,
         tail => 0, 
         maxinterval => 1,
-        ) or die $!;
+        ) or die "$!";
 
 my $line;
 while ( defined( $line = $tail->read) ) {
