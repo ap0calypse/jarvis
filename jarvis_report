@@ -32,6 +32,7 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=/opt/jarvis/jarvis.db", "", "", $dbarg
 # default header and footer for latex doc
 my $latexheader = <<"EOHEAD";
 \\documentclass[12pt]{scrartcl}
+\\usepackage[utf8]{inputenc}
 \\usepackage{graphicx}
 \\date{}
 \\title{Jarvis Report for $start - $end}
