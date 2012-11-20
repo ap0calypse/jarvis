@@ -1,4 +1,5 @@
  - sigint handler for jarvis [cleanup, ...]
+ - network encryption and/or better check for evil stuff
  - more agents
  - jarvis_report tool [latex output, piecharts, ...]
  - documentation on how jarvis works internally
