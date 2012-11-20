@@ -16,8 +16,11 @@ if (scalar @ARGV < 2) {
     die "You have to specify at least a start and an end date!\n";
 }
 
-# the first param is start date and time, the second is end
+# the first param is start date and time, the second is end. but we don't want
+# the '
 my ($start, $end) = (shift, shift);
+$start =~ s/\'//g;
+$end =~ s/\'//g;
 
 # we need pdflatex
 my $PDFLATEX = `which pdflatex`;
@@ -27,23 +30,30 @@ my $dbargs = {AutoCommit => 0, PrintError => 1};
 my $dbh = DBI->connect("dbi:SQLite:dbname=/opt/jarvis/jarvis.db", "", "", $dbargs);
 
 # default header and footer for latex doc
-my $latexheader = <<'EOHEAD';
-\documentclass[12pt]{scrartcl}
-\usepackage{graphicx}
+my $latexheader = <<"EOHEAD";
+\\documentclass[12pt]{scrartcl}
+\\usepackage{graphicx}
+\\date{}
+\\title{Jarvis Report for $start - $end}
+\\begin{document}
+\\maketitle
 EOHEAD
 
 my $latexfooter = <<'EOFOOT';
 \end{document}
 EOFOOT
 
-my $all_services = $dbh->prepare("SELECT distinct(name), typ from events;");
-$all_services->execute() or die "can't blabla";
+print $latexheader;
 
+my $all_services = $dbh->prepare("SELECT distinct(name), typ from events where datum BETWEEN ? AND ?;");
+$all_services->execute($start, $end) or die $dbh->errstr();
 
 # display all activated agents
 while(my ($name, $typ) = $all_services->fetchrow_array()) {
     print "$name : $typ\n";
 }
+
+print $latexfooter;
 
 
 $dbh->disconnect();
