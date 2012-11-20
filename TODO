@@ -11,4 +11,3 @@
  - raid status (maybe)
  - number of open files counter
  - check proc temp (lmsensors maybe)
- - check temperature data (hddtemp)
