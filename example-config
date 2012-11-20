@@ -30,6 +30,9 @@ agent=[ProcessMemCheck,"memproc_agent_1",60,'chromium',200]
 # agent that checks the temperature of /dev/sda every 60 seconds if its higher than 35 degrees
 agent=[DiskTemperatureCheck,"heat_check_1",60,/dev/sda,35]
 
+# agent that checks the temperature of first cpu (0) every 60 seconds if its higher than 40 degrees
+agent=[CPUTemperatureCheck,"cpuheat_check_1",60,0,40]
+
 # escalation triggers
 # explanation of fields:
 # first param (must be in '')   name of the trigger

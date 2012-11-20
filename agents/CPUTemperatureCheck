@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "./agents/";
+use JarvisFunctions;
+
+# what module is this?
+my $agent_name = "CPUTemperatureCheck";
+
+# every agent gets an id and the name from jarvis when started
+my ($id, $name) = @ARGV;
+
+# params just for this agent, not directly given from jarvis. we will
+# get them from the config later.
+
+my ($cpu_id, $interval, $maxtemp);
+
+# because every agent is different, we need to get the data from the config
+my $config = get_config();
+
+open my $CONFFD, "< $config" or die "$0: $!";
+while (<$CONFFD>) {
+    next if m/^\s*#.*/;
+    # got the config entry
+    if (m/.*agent=\[$agent_name,"$name", *(\d+) *, *(\d+) *, *(\d+) *\]/) {
+        ($interval, $cpu_id, $maxtemp) = ($1, $2, $3);
+    }
+    else {
+        next;
+    }
+}
+close $CONFFD;
+
+chomp(my $SENSORS = `which sensors`);
+if ($SENSORS eq "") {
+    print "CPUTemperatureCheck couldn't start, please install lm_sensors!\n";
+    exit();
+}
+
+while(1) {
+    my @temp = `$SENSORS`;
+    for my $line ( @temp ) {
+        if ($line =~ m/^Core $cpu_id:\s*\+(\d+\.\d+).+/) {
+            my $curtemp = $1;
+            if ($curtemp > $maxtemp) {
+                tell_jarvis($id, $name, $agent_name, 0, $curtemp);
+            }
+            else {
+                tell_jarvis($id, $name, $agent_name, 1, $curtemp);
+            }
+        }
+    }
+    sleep($interval);
+}
+

@@ -42,6 +42,7 @@ you consider writing an agent. Currently there are the following agents:
 * FileExistsCheck
 * DiskUsageCheck
 * DiskTemperatureCheck
+* CPUTemperatureCheck
 * ... much more to come (daily)
 
 The following perl modules need to be installed in order to run the agents flawlessly:
@@ -53,6 +54,7 @@ The following perl modules need to be installed in order to run the agents flawl
 Jarvis also relies on several external tools or programs to gather data, please install
 them to get the best user experience:
 
+* lm\_sensors (for CPUTemperatureCheck)
 * hddtemp (for DiskTemperatureCheck; this needs superuser privileges which is not ideal ... )
 
 ---
@@ -60,7 +62,6 @@ them to get the best user experience:
     jarvis ALL=(root) NOPASSWD:/usr/sbin/hddtemp
 ---
 
-* ... more to come
 
 
 ###### 2.1. TRIGGERS
