@@ -55,8 +55,10 @@ them to get the best user experience:
 
 * hddtemp (for DiskTemperatureCheck; this needs superuser privileges which is not ideal ... )
 
+---
     To make this work, you need to add this line to your /etc/sudoers file:
     jarvis ALL=(root) NOPASSWD:/usr/sbin/hddtemp
+---
 
 * ... more to come
 
