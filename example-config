@@ -16,7 +16,7 @@ agent=[DiskUsageCheck,"du_agent_1",60,/tmp,90]
 agent=[FileSizeCheck,"fs_agent_1",60,'/tmp/logfile',500000]
 
 # agent that checks /tmp/logfile every 60 seconds if it is bigger than 500.000 bytes
-agent=[FileExistsCheck,"fs_agent_1",60,'/tmp/logfile']
+agent=[FileExistsCheck,"fe_agent_1",60,'/tmp/logfile']
 
 # agent that checks if a given process (here chromium) is running. 
 agent=[ProcessCheck,"proc_agent_1",60,'chromium']
@@ -26,6 +26,9 @@ agent=[MaxProcessCheck,"numproc_agent_1",60,200]
 
 # agent that checks the amount of memory used (in MB) by a process every 60 seconds
 agent=[ProcessMemCheck,"memproc_agent_1",60,'chromium',200]
+
+# agent that checks the temperature of /dev/sda every 60 seconds if its higher than 35 degrees
+agent=[DiskTemperatureCheck,"heat_check_1",60,/dev/sda,35]
 
 # escalation triggers
 # explanation of fields:

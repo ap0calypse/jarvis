@@ -41,6 +41,7 @@ you consider writing an agent. Currently there are the following agents:
 * FileSizeCheck
 * FileExistsCheck
 * DiskUsageCheck
+* DiskTemperatureCheck
 * ... much more to come (daily)
 
 The following perl modules need to be installed in order to run the agents flawlessly:
@@ -48,6 +49,17 @@ The following perl modules need to be installed in order to run the agents flawl
 * perl-proc-processtable
 * perl-filesys-df
 * perl-file-tail
+
+Jarvis also relies on several external tools or programs to gather data, please install
+them to get the best user experience:
+
+* hddtemp (for DiskTemperatureCheck; this needs superuser privileges which is not ideal ... )
+
+    To make this work, you need to add this line to your /etc/sudoers file:
+    jarvis ALL=(root) NOPASSWD:/usr/sbin/hddtemp
+
+* ... more to come
+
 
 ###### 2.1. TRIGGERS
 

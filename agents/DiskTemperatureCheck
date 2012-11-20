@@ -1,0 +1,56 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "./agents/";
+use JarvisFunctions;
+
+# what module is this?
+my $agent_name = "DiskTemperatureCheck";
+
+# every agent gets an id and the name from jarvis when started
+my ($id, $name) = @ARGV;
+
+# params just for this agent, not directly given from jarvis. we will
+# get them from the config later.
+
+my ($disk, $interval, $maxtemp);
+
+# because every agent is different, we need to get the data from the config
+my $config = get_config();
+
+open my $CONFFD, "< $config" or die "$0: $!";
+while (<$CONFFD>) {
+    next if m/^\s*#.*/;
+    # got the config entry
+    if (m/.*agent=\[$agent_name,"$name", *(\d+) *, *(.+) *, *(\d+) *\]/) {
+        ($interval, $disk, $maxtemp) = ($1, $2, $3);
+    }
+    else {
+        next;
+    }
+}
+close $CONFFD;
+
+chomp(my $HDDTEMP = `which hddtemp`);
+if ($HDDTEMP eq "") {
+    print "DiskTemperatureCheck couldn't start, please install hddtemp!\n";
+    exit();
+}
+
+while(1) {
+    chomp(my $temp = `sudo $HDDTEMP '$disk'`);
+    if ($temp eq "") {
+        exit();
+    }
+    
+    my $val = (split /:/, $temp)[2];
+    $val =~ s/[^\d]//g;
+    if ($val < $maxtemp) {
+        tell_jarvis($id, $name, $agent_name, 1, $val);
+    }
+    else {
+        tell_jarvis($id, $name, $agent_name, 0, $val);
+    }
+    sleep($interval);
+}
+
