@@ -1,0 +1,22 @@
+jarvis documentation - CONFIGURATION
+
+So you managed to install jarvis? Good!
+
+The next step is the configuration which is pretty simple and straightforward.
+One agent is one line in the config (jarvis.conf). For example, to install an agent
+that monitors if another machine is reachable on port 80 every 10 seconds, you would 
+write this line into jarvis.conf:
+
+agent=[TCPConnect,"tcp_check_80",10,google.at,80]
+
+That's it! Wasn't too hard to get, right?
+
+But wait, what happens if the host isn't reachable? Well, at first: nothing.
+You have to tell jarvis what to do if errors occur. This behaviour is somewhat
+different from other projects you maybe know. The word we are looking for here
+is 'triggers'. A trigger is an action you define in the configuration. Confused?
+Let's look at an example. We will use the previously activated agent from below 
+and add some action now. For this example we want that a mail is sent after the
+host is not reachable 5 times in 60 seconds:
+
+trigger=['trigger_1',"tcp_check_80",5,60,/tmp/mailscript]

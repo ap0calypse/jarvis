@@ -1,0 +1,26 @@
+jarvis documentation - INSTALL
+
+To make things easy, jarvis comes with a installer that initializes the
+database and copies the files to the right location, which is '/opt/jarvis'.
+
+The complete directory view would look like this:
+
+/opt/jarvis/
+|
+|-> agents/         (the place where all the agents are stored)
+|-> doc/            (the place you are currently in, documentation)
+|-> jarvis          (the main program, daemon if you want)
+|-> jarvis_report   (reporting tool to get pdf reports)
+|-> install_jarvis  (the installer)
+|-> jarvis.db       (the sqlite database)
+|-> jarvis.conf     (the configuration file)
+ -> ....            (README, TODO, AUTHORS, ...)
+
+By executing install_jarvis as superuser, this should be the resulting directory
+tree. Additionally the installer adds the user 'jarvis' to /etc/passwd.
+
+Once the installer is finished, you can switch over to the jarvis user (which has
+/opt/jarvis as home directory) and execute ./jarvis. But you should have a look at
+the config (jarvis.conf) before doing so. Additionally there is a documentation 
+about the config (-> CONFIGURATION).
+
