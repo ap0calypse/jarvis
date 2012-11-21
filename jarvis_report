@@ -6,7 +6,7 @@ use DBI;
 # project:      jarvis - Just Another Really Versatile Information System
 # part:         jarvis_report - generate reports from jarvis data
 # author:       see AUTHORS
-# license:      BEER-WARE
+# license:      MIT
 # version:      0.1a
 
 
