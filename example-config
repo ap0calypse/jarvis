@@ -15,7 +15,7 @@ agent=[DiskUsageCheck,"du_agent_1",60,/tmp,90]
 # agent that checks /tmp/logfile every 60 seconds if it is bigger than 500.000 bytes
 agent=[FileSizeCheck,"fs_agent_1",60,'/tmp/logfile',500000]
 
-# agent that checks /tmp/logfile every 60 seconds if it is bigger than 500.000 bytes
+# agent that checks /tmp/logfile every 60 seconds if it exists 
 agent=[FileExistsCheck,"fe_agent_1",60,'/tmp/logfile']
 
 # agent that checks if a given process (here chromium) is running. 
